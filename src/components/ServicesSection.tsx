@@ -1,11 +1,12 @@
 import { CheckCircle2 } from "lucide-react";
+import Reveal from "@/components/Reveal";
 import { SERVICES } from "@/data/portfolio";
 
 export default function ServicesSection() {
   return (
     <section id="services" className="py-24 sm:py-28 bg-[#141414] text-white">
       <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-14">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <Reveal direction="up" className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <span className="text-xs font-bold tracking-[0.18em] uppercase text-[#FF7B00]">
               Capabilities
@@ -18,13 +19,18 @@ export default function ServicesSection() {
             Focused, end-to-end execution—from visual direction and interactive
             prototyping to production Next.js deployment.
           </p>
-        </div>
+        </Reveal>
 
         <div className="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {SERVICES.map((service) => (
-            <div
+          {SERVICES.map((service, index) => (
+            <Reveal
               key={service.number}
-              className="group rounded-3xl bg-[#1E1E1E] border border-white/10 hover:border-[#E85D04] p-7 flex flex-col justify-between transition-colors duration-300"
+              direction="up"
+              delay={index * 90}
+              className="h-full"
+            >
+            <div
+              className="h-full group rounded-3xl bg-[#1E1E1E] border border-white/10 hover:border-[#E85D04] p-7 flex flex-col justify-between transition-colors duration-300"
             >
               <div>
                 <div className="font-display text-4xl text-[#FF7B00]">
@@ -50,6 +56,7 @@ export default function ServicesSection() {
                 ))}
               </ul>
             </div>
+            </Reveal>
           ))}
         </div>
       </div>

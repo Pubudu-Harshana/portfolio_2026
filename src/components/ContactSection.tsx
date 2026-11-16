@@ -4,24 +4,100 @@ import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { ArrowUpRight, CheckCircle2, Mail, Send } from "lucide-react";
 import LinkedInIcon from "@/components/LinkedInIcon";
+import {
+  BehanceIcon,
+  FacebookIcon,
+  InstagramIcon,
+  WhatsAppIcon,
+} from "@/components/SocialIcons";
+import Reveal from "@/components/Reveal";
 import { PROFILE } from "@/data/portfolio";
 
 export default function ContactSection() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [company, setCompany] = useState(""); // Honeypot
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [submittedMode, setSubmittedMode] = useState<
+    "delivered" | "fallback" | null
+  >(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !message.trim()) return;
-    setSubmitted(true);
+    if (!name.trim() || !email.trim() || !message.trim() || submitting) return;
+
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message, company }),
+      });
+
+      const data = (await res.json()) as {
+        ok?: boolean;
+        mode?: "delivered" | "fallback" | "accepted";
+        error?: string;
+      };
+
+      if (!res.ok) {
+        setError(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+
+      setSubmittedMode(data.mode === "delivered" ? "delivered" : "fallback");
+    } catch {
+      setError("Network error. Please use WhatsApp or direct email below.");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  const mailtoHref = `mailto:${PROFILE.email}?subject=${encodeURIComponent(
+    `Portfolio Enquiry from ${name || "Client"}`
+  )}&body=${encodeURIComponent(
+    `Name: ${name}\nEmail: ${email}\n\n${message}`
+  )}`;
+
+  const socialButtons = [
+    {
+      label: "LinkedIn",
+      href: PROFILE.linkedinUrl,
+      icon: <LinkedInIcon className="w-4 h-4" />,
+    },
+    {
+      label: "Behance",
+      href: PROFILE.behanceUrl,
+      icon: <BehanceIcon className="w-4 h-4" />,
+    },
+    {
+      label: "Instagram",
+      href: PROFILE.instagramUrl,
+      icon: <InstagramIcon className="w-4 h-4" />,
+    },
+    {
+      label: "Facebook",
+      href: PROFILE.facebookUrl,
+      icon: <FacebookIcon className="w-4 h-4" />,
+    },
+    {
+      label: `WhatsApp (${PROFILE.whatsappDisplay})`,
+      href: PROFILE.whatsappUrl,
+      icon: <WhatsAppIcon className="w-4 h-4" />,
+    },
+  ];
 
   return (
     <footer id="contact" className="bg-white pt-24 pb-12">
       <div className="mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-14">
-        <div className="rounded-[2rem] overflow-hidden border border-[#EAE6E1] shadow-xl grid grid-cols-1 lg:grid-cols-12">
+        <Reveal
+          direction="up"
+          className="rounded-[2rem] overflow-hidden border border-[#EAE6E1] shadow-xl grid grid-cols-1 lg:grid-cols-12"
+        >
           {/* Left: High-Impact Burnt Orange CTA Panel */}
           <div className="lg:col-span-6 hero-orange-gradient p-8 sm:p-12 lg:p-14 text-white flex flex-col justify-between">
             <div>
@@ -39,30 +115,49 @@ export default function ContactSection() {
               </p>
             </div>
 
-            <div className="mt-10 flex flex-col sm:flex-row flex-wrap gap-3">
-              <a
-                href={PROFILE.linkedinUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white text-[#141414] hover:bg-[#141414] hover:text-white px-6 py-3.5 text-xs font-bold tracking-[0.1em] uppercase transition-colors"
-              >
-                <LinkedInIcon className="w-4 h-4" />
-                Message on LinkedIn
-                <ArrowUpRight className="w-4 h-4" />
-              </a>
-              <a
-                href={`mailto:${PROFILE.email}`}
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 hover:bg-white/20 text-white px-6 py-3.5 text-xs font-bold tracking-[0.1em] uppercase transition-colors"
-              >
-                <Mail className="w-4 h-4" />
-                {PROFILE.email}
-              </a>
+            <div className="mt-10 flex flex-col gap-5">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+                <a
+                  href={PROFILE.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-white text-[#141414] hover:bg-[#141414] hover:text-white px-6 py-3.5 text-xs font-bold tracking-[0.1em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  <WhatsAppIcon className="w-4 h-4" />
+                  WhatsApp · {PROFILE.whatsappDisplay}
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+                <a
+                  href={`mailto:${PROFILE.email}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 hover:bg-white/20 text-white px-6 py-3.5 text-xs font-bold tracking-[0.1em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                >
+                  <Mail className="w-4 h-4" />
+                  {PROFILE.email}
+                </a>
+              </div>
+
+              {/* Consistent Circular Icon-Only Social Buttons */}
+              <div className="flex flex-wrap items-center gap-2.5">
+                {socialButtons.slice(0, 4).map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={item.label}
+                    title={item.label}
+                    className="w-10 h-10 rounded-full bg-black/20 hover:bg-white text-white hover:text-[#141414] flex items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  >
+                    {item.icon}
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Right: Clean Inquiry Form */}
           <div className="lg:col-span-6 bg-[#FAF8F6] p-8 sm:p-12 lg:p-14">
-            {submitted ? (
+            {submittedMode ? (
               <div className="h-full flex flex-col items-start justify-center py-8">
                 <div className="w-12 h-12 rounded-2xl bg-[#E85D04]/15 text-[#E85D04] flex items-center justify-center">
                   <CheckCircle2 className="w-6 h-6" />
@@ -71,23 +166,33 @@ export default function ContactSection() {
                   Thanks, {name}!
                 </h3>
                 <p className="mt-2 text-sm text-[#525252] leading-relaxed max-w-md">
-                  Your message has been prepared. For the fastest response, you
-                  can also connect directly on LinkedIn.
+                  {submittedMode === "delivered"
+                    ? "Your enquiry has been sent directly to my inbox. I'll reply shortly."
+                    : "Your enquiry is ready—click below to send it via your email app or chat on WhatsApp for an instant reply."}
                 </p>
                 <div className="mt-6 flex flex-wrap gap-3">
+                  {submittedMode === "fallback" && (
+                    <a
+                      href={mailtoHref}
+                      className="inline-flex items-center gap-2 rounded-full bg-[#E85D04] text-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-[#141414] transition-colors"
+                    >
+                      Open Email App
+                      <ArrowUpRight className="w-4 h-4" />
+                    </a>
+                  )}
                   <a
-                    href={PROFILE.linkedinUrl}
+                    href={PROFILE.whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full bg-[#141414] text-white px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-[#E85D04] transition-colors"
                   >
-                    Open LinkedIn
+                    Chat on WhatsApp
                     <ArrowUpRight className="w-4 h-4" />
                   </a>
                   <button
                     type="button"
                     onClick={() => {
-                      setSubmitted(false);
+                      setSubmittedMode(null);
                       setName("");
                       setEmail("");
                       setMessage("");
@@ -99,7 +204,7 @@ export default function ContactSection() {
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5" noValidate>
                 <div>
                   <h3 className="text-2xl font-bold text-[#141414]">
                     Quick Project Inquiry
@@ -108,6 +213,18 @@ export default function ContactSection() {
                     Share a few details and I&apos;ll get back to you promptly.
                   </p>
                 </div>
+
+                {/* Honeypot anti-spam field */}
+                <input
+                  type="text"
+                  name="company"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  className="hidden"
+                  aria-hidden="true"
+                />
 
                 <div>
                   <label
@@ -163,17 +280,24 @@ export default function ContactSection() {
                   />
                 </div>
 
+                {error && (
+                  <p role="alert" className="text-xs font-semibold text-red-600">
+                    {error}
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#141414] hover:bg-[#E85D04] text-white px-6 py-3.5 text-xs font-bold tracking-[0.12em] uppercase transition-colors cursor-pointer"
+                  disabled={submitting}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#141414] hover:bg-[#E85D04] disabled:opacity-60 text-white px-6 py-3.5 text-xs font-bold tracking-[0.12em] uppercase transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E85D04]"
                 >
-                  Send Message
+                  {submitting ? "Sending..." : "Send Message"}
                   <Send className="w-3.5 h-3.5" />
                 </button>
               </form>
             )}
           </div>
-        </div>
+        </Reveal>
 
         {/* Bottom Copyright Bar */}
         <div className="mt-12 pt-8 border-t border-[#ECECEC] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#6B6B6B]">
@@ -193,7 +317,7 @@ export default function ContactSection() {
             <span>· © 2026 All rights reserved.</span>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-5">
             <a href="#work" className="hover:text-[#E85D04] transition-colors">
               Work
             </a>
@@ -206,18 +330,25 @@ export default function ContactSection() {
             >
               Services
             </a>
-            <a
-              href={PROFILE.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#E85D04] transition-colors font-semibold text-[#141414]"
-            >
-              LinkedIn ↗
-            </a>
+
+            <div className="flex items-center gap-2 pl-2 border-l border-[#E5E5E5]">
+              {socialButtons.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={item.label}
+                  title={item.label}
+                  className="w-8 h-8 rounded-full bg-[#F5F5F5] hover:bg-[#E85D04] text-[#141414] hover:text-white flex items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E85D04]"
+                >
+                  {item.icon}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>
     </footer>
   );
 }
-

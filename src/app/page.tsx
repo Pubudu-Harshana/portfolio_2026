@@ -6,7 +6,7 @@ import ContactSection from "@/components/ContactSection";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white text-[#141414]">
+    <main className="min-h-screen bg-white text-[#141414] overflow-x-clip">
       <HeroSection />
       <WorkSection />
       <AboutSection />

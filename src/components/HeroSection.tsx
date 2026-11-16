@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Menu, Pause, Play, X } from "lucide-react";
+import AvailabilityRotator from "@/components/AvailabilityRotator";
 import LinkedInIcon from "@/components/LinkedInIcon";
 import HeroPortrait from "@/components/HeroPortrait";
 import WindParticleHeadline from "@/components/WindParticleHeadline";
@@ -194,9 +195,10 @@ export default function HeroSection() {
             </div>
 
             <h2 className="mt-2.5 text-2xl sm:text-3xl font-bold tracking-tight text-[#141414] leading-[1.15]">
-              Freelance
-              <br />
-              Projects
+              <span className="sr-only">
+                Open to Full-Time Roles, Freelance Projects, and Remote Teams
+              </span>
+              <AvailabilityRotator items={PROFILE.availabilityModes} />
             </h2>
 
             <p className="mt-2.5 text-sm leading-relaxed text-[#6B6B6B] max-w-[230px]">

@@ -12,6 +12,7 @@ export interface ProjectItem {
   accent: string;
   image?: string;
   liveUrl?: string;
+  repoUrl?: string;
 }
 
 export interface DesignGalleryItem {
@@ -35,11 +36,18 @@ export const PROFILE = {
   heroRotatingWords: ["DESIGN", "DEVELOP", "LAUNCH"] as const,
   heroSupportingCopy:
     "I turn business ideas into distinctive websites with thoughtful design and reliable development.",
-  availabilityLabel: "AVAILABLE FOR",
-  availabilityTitle: "Freelance Projects",
+  availabilityLabel: "OPEN TO WORK",
+  availabilityModes: [
+    "Full-Time Roles",
+    "Freelance Projects",
+    "Remote Teams",
+  ] as const,
+  availabilityTitle: "Full-Time & Freelance",
   availabilitySubtitle: "Website Design & Full-Stack Development",
   linkedinUrl: "https://www.linkedin.com/in/pubuduh/",
+  githubUrl: "https://github.com/Pubudu-Harshana",
   behanceUrl: "https://www.behance.net/pubuduharshana",
+  cvUrl: "/cv",
   instagramUrl: "https://www.instagram.com/pubudu_.h/",
   facebookUrl: "https://www.facebook.com/harshana.pubu/",
   whatsappUrl: "https://wa.me/94712407273",
@@ -69,11 +77,38 @@ export const PROFILE = {
   ],
   testimonial: {
     quote:
-      "Pubudu delivered outstanding work that exceeded our expectations — sharp design instincts paired with rock-solid execution.",
-    author: "JAMES CARTER",
-    role: "FOUNDER, BRIXO",
+      "The Ravi Tours & Travels platform and educational design projects were delivered with exceptional precision.",
+    author: "HASHEN DE SILVA",
+    role: "OWNER, RAVI TOURS & TRAVELS",
   },
 };
+
+export interface ClientReview {
+  name: string;
+  role: string;
+  quote: string;
+  source: string;
+  initials: string;
+}
+
+export const CLIENT_REVIEWS: ClientReview[] = [
+  {
+    name: "Hashen De Silva",
+    role: "Owner, Ravi Tours & Travels",
+    quote:
+      "I’m really happy with your work, and I truly appreciate the effort and quality. The Ravi Tours & Travels platform and educational design projects were delivered with exceptional precision.",
+    source: "Google Review",
+    initials: "HD",
+  },
+  {
+    name: "Methmal Balasooriya",
+    role: "Owner, CarVibes.lk",
+    quote:
+      "Completely transformed our automotive detailing online platform. Our ceramic coating appointment bookings surged by 300% within the first month. The mobile speed and UI are top tier.",
+    source: "Google Review",
+    initials: "MB",
+  },
+];
 
 /*
  * HOW TO ADD YOUR WORKS:
@@ -87,10 +122,10 @@ export const PROJECTS: ProjectItem[] = [
     id: "carvibes-lk",
     discipline: "web",
     title: "CarVibes.lk Platform",
-    category: "Automotive Marketplace",
+    category: "Automotive Detailing",
     year: "2026",
     summary:
-      "High-performance automotive web platform built for Sri Lankan car enthusiasts and dealers—featuring fast vehicle discovery, clean editorial cards, and mobile-first browsing.",
+      "Automotive detailing and car care web platform featuring online service booking, showroom packages, steam sanitation scheduling, and ceramic coating experiences.",
     impact: "Live at carvibes.lk",
     tags: ["Next.js", "TypeScript", "Marketplace UI", "Responsive Web"],
     accent: "from-[#C84B08] to-[#FF7B00]",

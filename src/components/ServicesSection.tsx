@@ -1,6 +1,6 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Star } from "lucide-react";
 import Reveal from "@/components/Reveal";
-import { SERVICES } from "@/data/portfolio";
+import { CLIENT_REVIEWS, SERVICES } from "@/data/portfolio";
 
 export default function ServicesSection() {
   return (
@@ -58,6 +58,58 @@ export default function ServicesSection() {
             </div>
             </Reveal>
           ))}
+        </div>
+
+        {/* Verified Google Reviews */}
+        <div className="mt-16 pt-14 border-t border-white/10">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <span className="text-xs font-bold tracking-[0.18em] uppercase text-[#FF7B00]">
+                Client Feedback
+              </span>
+              <h3 className="mt-2 font-display text-3xl sm:text-4xl uppercase tracking-tight">
+                Google Reviews
+              </h3>
+            </div>
+            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/75">
+              <div className="flex items-center gap-0.5 text-[#FF7B00]">
+                {[0, 1, 2, 3, 4].map((s) => (
+                  <Star key={s} className="w-3.5 h-3.5 fill-current" />
+                ))}
+              </div>
+              <span>Verified Client Reviews</span>
+            </div>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {CLIENT_REVIEWS.map((review, index) => (
+              <Reveal key={review.name} direction="up" delay={index * 90}>
+                <blockquote className="h-full rounded-3xl bg-[#1E1E1E] border border-white/10 p-7 sm:p-8 flex flex-col justify-between gap-6">
+                  <p className="text-sm sm:text-base leading-relaxed text-white/85">
+                    &ldquo;{review.quote}&rdquo;
+                  </p>
+                  <footer className="flex items-center justify-between gap-4 pt-4 border-t border-white/10">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#E85D04] text-white text-xs font-bold flex items-center justify-center shrink-0">
+                        {review.initials}
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-white">
+                          {review.name}
+                        </div>
+                        <div className="text-xs text-white/60">
+                          {review.role}
+                        </div>
+                      </div>
+                    </div>
+                    <span className="rounded-full bg-white/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-white/75">
+                      {review.source}
+                    </span>
+                  </footer>
+                </blockquote>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>

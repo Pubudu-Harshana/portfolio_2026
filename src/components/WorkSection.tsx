@@ -374,6 +374,17 @@ export default function WorkSection() {
             </div>
 
             <div className="mt-8 flex flex-wrap items-center justify-end gap-3">
+              {selectedProject.repoUrl && (
+                <a
+                  href={selectedProject.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-[#D4D4D4] hover:border-[#141414] text-[#141414] px-5 py-3 text-xs font-bold uppercase tracking-wider transition-colors"
+                >
+                  View Code
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
               {selectedProject.liveUrl && (
                 <a
                   href={selectedProject.liveUrl}

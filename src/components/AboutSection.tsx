@@ -1,9 +1,11 @@
 import Image from "next/image";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, FileDown, MapPin } from "lucide-react";
 import LinkedInIcon from "@/components/LinkedInIcon";
 import {
   BehanceIcon,
   FacebookIcon,
+  GitHubIcon,
   InstagramIcon,
   WhatsAppIcon,
 } from "@/components/SocialIcons";
@@ -92,17 +94,36 @@ export default function AboutSection() {
               ))}
             </div>
 
-            {/* Social & Direct Links */}
+            {/* Social, GitHub & CV Actions */}
             <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link
+                href={PROFILE.cvUrl}
+                className="inline-flex items-center gap-2 rounded-full bg-[#E85D04] hover:bg-[#141414] text-white px-6 py-3.5 text-xs font-bold tracking-[0.12em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E85D04]"
+              >
+                <FileDown className="w-4 h-4" />
+                Download CV
+              </Link>
+
               <a
                 href={PROFILE.linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 rounded-full bg-[#141414] hover:bg-[#E85D04] text-white px-6 py-3.5 text-xs font-bold tracking-[0.12em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E85D04]"
+                className="inline-flex items-center gap-2 rounded-full bg-[#141414] hover:bg-[#E85D04] text-white px-5 py-3.5 text-xs font-bold tracking-[0.12em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E85D04]"
               >
                 <LinkedInIcon className="w-4 h-4" />
-                Connect on LinkedIn
-                <ArrowUpRight className="w-4 h-4" />
+                LinkedIn
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+
+              <a
+                href={PROFILE.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub Profile"
+                title="GitHub"
+                className="w-11 h-11 rounded-full border border-[#E5E0DA] bg-[#FAF8F6] hover:bg-[#141414] hover:border-[#141414] text-[#141414] hover:text-white flex items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E85D04]"
+              >
+                <GitHubIcon className="w-4 h-4" />
               </a>
 
               <a

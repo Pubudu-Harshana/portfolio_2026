@@ -7,6 +7,7 @@ import LinkedInIcon from "@/components/LinkedInIcon";
 import {
   BehanceIcon,
   FacebookIcon,
+  GitHubIcon,
   InstagramIcon,
   WhatsAppIcon,
 } from "@/components/SocialIcons";
@@ -64,6 +65,11 @@ export default function ContactSection() {
   )}`;
 
   const socialButtons = [
+    {
+      label: "GitHub",
+      href: PROFILE.githubUrl,
+      icon: <GitHubIcon className="w-4 h-4" />,
+    },
     {
       label: "LinkedIn",
       href: PROFILE.linkedinUrl,
@@ -138,7 +144,7 @@ export default function ContactSection() {
 
               {/* Consistent Circular Icon-Only Social Buttons */}
               <div className="flex flex-wrap items-center gap-2.5">
-                {socialButtons.slice(0, 4).map((item) => (
+                {socialButtons.slice(0, 5).map((item) => (
                   <a
                     key={item.label}
                     href={item.href}

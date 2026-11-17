@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowUpRight, FileDown, MapPin } from "lucide-react";
 import LinkedInIcon from "@/components/LinkedInIcon";
 import {
@@ -96,13 +95,16 @@ export default function AboutSection() {
 
             {/* Social, GitHub & CV Actions */}
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
+              <a
                 href={PROFILE.cvUrl}
+                download="Pubudu_Harshana_CV_2026.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full bg-[#E85D04] hover:bg-[#141414] text-white px-6 py-3.5 text-xs font-bold tracking-[0.12em] uppercase transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E85D04]"
               >
                 <FileDown className="w-4 h-4" />
                 Download CV
-              </Link>
+              </a>
 
               <a
                 href={PROFILE.linkedinUrl}

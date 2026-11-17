@@ -47,7 +47,7 @@ export const PROFILE = {
   linkedinUrl: "https://www.linkedin.com/in/pubuduh/",
   githubUrl: "https://github.com/Pubudu-Harshana",
   behanceUrl: "https://www.behance.net/pubuduharshana",
-  cvUrl: "/cv",
+  cvUrl: "/Pubudu_Harshana_CV_2026.pdf",
   instagramUrl: "https://www.instagram.com/pubudu_.h/",
   facebookUrl: "https://www.facebook.com/harshana.pubu/",
   whatsappUrl: "https://wa.me/94712407273",

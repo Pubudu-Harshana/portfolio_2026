@@ -306,9 +306,9 @@ export default function ContactSection() {
         </Reveal>
 
         {/* Bottom Copyright Bar */}
-        <div className="mt-12 pt-8 border-t border-[#ECECEC] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#6B6B6B]">
-          <div className="flex items-center gap-2.5">
-            <div className="relative w-6 h-6 rounded-md overflow-hidden">
+        <div className="mt-12 pt-8 border-t border-[#ECECEC] flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-[#6B6B6B] text-center sm:text-left">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-2.5 gap-y-1.5">
+            <div className="relative w-6 h-6 rounded-md overflow-hidden shrink-0">
               <Image
                 src="/images/logo.png"
                 alt="Pubudu H."
@@ -320,24 +320,29 @@ export default function ContactSection() {
             <span className="font-semibold text-[#141414]">
               {PROFILE.brandName}
             </span>
-            <span>· © 2026 All rights reserved.</span>
+            <span className="w-full sm:w-auto">© 2026 All rights reserved.</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-5">
-            <a href="#work" className="hover:text-[#E85D04] transition-colors">
-              Work
-            </a>
-            <a href="#about" className="hover:text-[#E85D04] transition-colors">
-              About
-            </a>
-            <a
-              href="#services"
-              className="hover:text-[#E85D04] transition-colors"
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-5">
+            <nav
+              aria-label="Footer navigation"
+              className="flex items-center justify-center gap-6"
             >
-              Services
-            </a>
+              <a href="#work" className="hover:text-[#E85D04] transition-colors">
+                Work
+              </a>
+              <a href="#about" className="hover:text-[#E85D04] transition-colors">
+                About
+              </a>
+              <a
+                href="#services"
+                className="hover:text-[#E85D04] transition-colors"
+              >
+                Services
+              </a>
+            </nav>
 
-            <div className="flex items-center gap-2 pl-2 border-l border-[#E5E5E5]">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:pl-5 sm:border-l sm:border-[#E5E5E5]">
               {socialButtons.map((item) => (
                 <a
                   key={item.label}

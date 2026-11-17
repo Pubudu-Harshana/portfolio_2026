@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Anton, Plus_Jakarta_Sans } from "next/font/google";
+import FloatingCvButton from "@/components/FloatingCvButton";
 import PageLoader from "@/components/PageLoader";
 import SmoothScroll from "@/components/SmoothScroll";
 import { PROFILE } from "@/data/portfolio";
@@ -94,6 +95,7 @@ export default function RootLayout({
         />
         <PageLoader />
         <SmoothScroll>{children}</SmoothScroll>
+        <FloatingCvButton />
       </body>
     </html>
   );

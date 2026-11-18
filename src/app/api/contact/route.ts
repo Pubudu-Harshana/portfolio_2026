@@ -9,6 +9,115 @@ interface ContactPayload {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function buildEnquiryEmailHtml(params: {
+  name: string;
+  email: string;
+  message: string;
+  siteUrl: string;
+}): string {
+  const safeName = escapeHtml(params.name);
+  const safeEmail = escapeHtml(params.email);
+  const safeMessage = escapeHtml(params.message).replace(/\r?\n/g, "<br />");
+  const replySubject = encodeURIComponent("Re: Your enquiry on pubudu.online");
+  const replyHref = `mailto:${encodeURIComponent(params.email)}?subject=${replySubject}`;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Portfolio Enquiry</title>
+  </head>
+  <body style="margin:0;padding:0;background-color:#F4F1ED;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#141414;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#F4F1ED;padding:32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background-color:#FFFFFF;border-radius:20px;overflow:hidden;border:1px solid #EAE6E1;">
+            <!-- Header -->
+            <tr>
+              <td style="background-color:#141414;padding:28px 32px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td style="vertical-align:middle;">
+                      <span style="display:inline-block;width:30px;height:30px;line-height:30px;text-align:center;border-radius:8px;background-color:#E85D04;color:#FFFFFF;font-weight:800;font-size:16px;vertical-align:middle;">P</span>
+                      <span style="margin-left:10px;color:#FFFFFF;font-size:15px;font-weight:700;letter-spacing:0.04em;vertical-align:middle;">Pubudu H.</span>
+                    </td>
+                    <td align="right" style="vertical-align:middle;">
+                      <span style="display:inline-block;padding:5px 12px;border-radius:999px;background-color:rgba(232,93,4,0.18);border:1px solid rgba(255,123,0,0.4);color:#FF9E44;font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;">New Enquiry</span>
+                    </td>
+                  </tr>
+                </table>
+                <h1 style="margin:20px 0 6px;color:#FFFFFF;font-size:24px;line-height:1.25;font-weight:800;letter-spacing:-0.02em;">
+                  New project message from ${safeName}
+                </h1>
+                <p style="margin:0;color:#A3A3A3;font-size:13px;">
+                  Submitted via your portfolio contact form
+                </p>
+              </td>
+            </tr>
+
+            <!-- Sender Details -->
+            <tr>
+              <td style="padding:28px 32px 0;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#FAF8F6;border:1px solid #EAE6E1;border-radius:14px;padding:18px 20px;">
+                  <tr>
+                    <td style="padding-bottom:10px;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#8A8A8A;width:90px;">From</td>
+                    <td style="padding-bottom:10px;font-size:14px;font-weight:700;color:#141414;">${safeName}</td>
+                  </tr>
+                  <tr>
+                    <td style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#8A8A8A;">Email</td>
+                    <td style="font-size:14px;font-weight:600;">
+                      <a href="mailto:${safeEmail}" style="color:#E85D04;text-decoration:none;">${safeEmail}</a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Message Body -->
+            <tr>
+              <td style="padding:22px 32px 0;">
+                <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#E85D04;margin-bottom:10px;">
+                  Project Brief
+                </div>
+                <div style="background-color:#FAF8F6;border-left:3px solid #E85D04;border-radius:10px;padding:18px 20px;font-size:15px;line-height:1.65;color:#262626;">
+                  ${safeMessage}
+                </div>
+              </td>
+            </tr>
+
+            <!-- Reply CTA -->
+            <tr>
+              <td style="padding:28px 32px 32px;">
+                <a href="${replyHref}" style="display:inline-block;background-color:#E85D04;color:#FFFFFF;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:14px 26px;border-radius:999px;">
+                  Reply to ${safeName} &rarr;
+                </a>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="background-color:#FAF8F6;border-top:1px solid #EAE6E1;padding:18px 32px;font-size:12px;color:#737373;">
+                Sent from <a href="${escapeHtml(params.siteUrl)}" style="color:#141414;font-weight:600;text-decoration:none;">${escapeHtml(params.siteUrl.replace(/^https?:\/\//, ""))}</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+}
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as ContactPayload;
@@ -49,6 +158,7 @@ export async function POST(request: Request) {
       .split(",")
       .map((addr) => addr.trim())
       .filter(Boolean);
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://pubudu.online";
 
     if (resendKey) {
       const res = await fetch("https://api.resend.com/emails", {
@@ -65,6 +175,7 @@ export async function POST(request: Request) {
           reply_to: email,
           subject: `New Portfolio Enquiry from ${name}`,
           text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+          html: buildEnquiryEmailHtml({ name, email, message, siteUrl }),
         }),
       });
 
@@ -78,7 +189,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true, mode: "delivered" });
     }
 
-    // No RESEND_API_KEY configured yet; client can still offer direct mailto/WhatsApp
     return NextResponse.json({ ok: true, mode: "fallback" });
   } catch {
     return NextResponse.json(

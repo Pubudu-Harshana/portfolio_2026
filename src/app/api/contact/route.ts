@@ -44,7 +44,11 @@ export async function POST(request: Request) {
     }
 
     const resendKey = process.env.RESEND_API_KEY;
-    const toEmail = process.env.CONTACT_TO_EMAIL || "pubuduhar@gmail.com";
+    const rawToEmails = process.env.CONTACT_TO_EMAIL || "pubuduhar@gmail.com";
+    const toEmails = rawToEmails
+      .split(",")
+      .map((addr) => addr.trim())
+      .filter(Boolean);
 
     if (resendKey) {
       const res = await fetch("https://api.resend.com/emails", {
@@ -57,7 +61,7 @@ export async function POST(request: Request) {
           from:
             process.env.RESEND_FROM_EMAIL ||
             "Portfolio Enquiry <onboarding@resend.dev>",
-          to: [toEmail],
+          to: toEmails.length > 0 ? toEmails : ["pubuduhar@gmail.com"],
           reply_to: email,
           subject: `New Portfolio Enquiry from ${name}`,
           text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,

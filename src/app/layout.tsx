@@ -20,7 +20,7 @@ const anton = Anton({
 });
 
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://pubuduh.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL || "https://pubudu.online";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

@@ -25,7 +25,7 @@ const SITE_URL =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Pubudu H. — Freelance Web Developer & Designer",
+  title: "Pubudu.H - Portfolio",
   description:
     "I turn business ideas into distinctive websites with thoughtful design and reliable full-stack Next.js development.",
   keywords: [

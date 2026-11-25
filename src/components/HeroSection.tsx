@@ -224,21 +224,16 @@ export default function HeroSection() {
           <div className="flex flex-col gap-2.5 lg:text-white text-[#141414]">
             <div className="flex items-center -space-x-2.5">
               {[
-                "/images/about-1.jpg",
-                "/images/about-2.jpg",
-                "/images/about-3.jpg",
-              ].map((src, idx) => (
+                { initials: "AM", bg: "bg-[#1E1E1E]" },
+                { initials: "BK", bg: "bg-[#3B332E]" },
+                { initials: "LC", bg: "bg-[#B83B06]" },
+              ].map((avatar) => (
                 <div
-                  key={src}
-                  className="relative w-9 h-9 rounded-full overflow-hidden ring-2 ring-white shadow-sm"
+                  key={avatar.initials}
+                  aria-hidden="true"
+                  className={`w-9 h-9 rounded-full ${avatar.bg} text-white text-[11px] font-bold flex items-center justify-center ring-2 ring-white shadow-sm select-none`}
                 >
-                  <Image
-                    src={src}
-                    alt={`Collaborator ${idx + 1}`}
-                    fill
-                    sizes="36px"
-                    className="object-cover"
-                  />
+                  {avatar.initials}
                 </div>
               ))}
               <div className="w-9 h-9 rounded-full bg-[#F28C38] lg:bg-white/25 backdrop-blur-sm text-white text-[11px] font-bold flex items-center justify-center ring-2 ring-white">
@@ -267,14 +262,11 @@ export default function HeroSection() {
                   {PROFILE.testimonial.role}
                 </div>
               </div>
-              <div className="relative w-8 h-8 rounded-full overflow-hidden ring-2 ring-[#E85D04]/30">
-                <Image
-                  src="/images/hero-portrait.jpg"
-                  alt={PROFILE.testimonial.author}
-                  fill
-                  sizes="32px"
-                  className="object-cover"
-                />
+              <div
+                aria-hidden="true"
+                className="w-8 h-8 rounded-full bg-[#E85D04] text-white text-[11px] font-bold flex items-center justify-center ring-2 ring-[#E85D04]/25 shrink-0 select-none"
+              >
+                HD
               </div>
             </div>
           </div>

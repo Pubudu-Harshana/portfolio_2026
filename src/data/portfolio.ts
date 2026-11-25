@@ -104,7 +104,7 @@ export const CLIENT_REVIEWS: ClientReview[] = [
     name: "Methmal Balasooriya",
     role: "Owner, CarVibes.lk",
     quote:
-      "Completely transformed our automotive detailing online platform. Our ceramic coating appointment bookings surged by 300% within the first month. The mobile speed and UI are top tier.",
+      "Completely transformed our automotive detailing online platform. Appointment bookings increased noticeably, and the mobile speed and UI are top tier.",
     source: "Google Review",
     initials: "MB",
   },

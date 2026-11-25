@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Menu, Pause, Play, X } from "lucide-react";
 import AvailabilityRotator from "@/components/AvailabilityRotator";
+import HeroTestimonialCard from "@/components/HeroTestimonialCard";
 import LinkedInIcon from "@/components/LinkedInIcon";
 import HeroPortrait from "@/components/HeroPortrait";
 import WindParticleHeadline from "@/components/WindParticleHeadline";
@@ -29,6 +30,20 @@ export default function HeroSection() {
     mediaQuery.addEventListener("change", updatePreference);
     return () => mediaQuery.removeEventListener("change", updatePreference);
   }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
 
   return (
     <section className="relative w-full min-h-[100svh] lg:min-h-[760px] lg:h-[100svh] lg:max-h-[940px] bg-white overflow-hidden">
@@ -245,31 +260,8 @@ export default function HeroSection() {
             </p>
           </div>
 
-          {/* Bottom-Right Testimonial Card */}
-          <div className="w-full sm:w-[290px] rounded-2xl bg-[#F6F6F6] border border-[#ECECEC] p-5 shadow-sm">
-            <div className="font-display text-3xl leading-none text-[#E85D04] select-none">
-              &ldquo;
-            </div>
-            <p className="mt-1 text-xs leading-relaxed text-[#3D3D3D]">
-              {PROFILE.testimonial.quote}
-            </p>
-            <div className="mt-4 flex items-center justify-between gap-3">
-              <div>
-                <div className="text-[11px] font-bold tracking-wider text-[#141414]">
-                  {PROFILE.testimonial.author}
-                </div>
-                <div className="text-[10px] font-medium tracking-wider text-[#8A8A8A]">
-                  {PROFILE.testimonial.role}
-                </div>
-              </div>
-              <div
-                aria-hidden="true"
-                className="w-8 h-8 rounded-full bg-[#E85D04] text-white text-[11px] font-bold flex items-center justify-center ring-2 ring-[#E85D04]/25 shrink-0 select-none"
-              >
-                HD
-              </div>
-            </div>
-          </div>
+          {/* Bottom-Right Dynamic Testimonial Card */}
+          <HeroTestimonialCard />
         </div>
       </div>
 

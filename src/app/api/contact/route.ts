@@ -8,6 +8,34 @@ interface ContactPayload {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
+const RATE_LIMIT_MAX = 5;
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(ip: string): { allowed: boolean; retryAfterSec: number } {
+  const now = Date.now();
+  if (rateLimitMap.size > 500) {
+    for (const [key, entry] of rateLimitMap.entries()) {
+      if (entry.resetAt <= now) rateLimitMap.delete(key);
+    }
+  }
+
+  const current = rateLimitMap.get(ip);
+  if (!current || current.resetAt <= now) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true, retryAfterSec: 0 };
+  }
+
+  if (current.count >= RATE_LIMIT_MAX) {
+    return {
+      allowed: false,
+      retryAfterSec: Math.max(1, Math.ceil((current.resetAt - now) / 1000)),
+    };
+  }
+
+  current.count += 1;
+  return { allowed: true, retryAfterSec: 0 };
+}
 
 function escapeHtml(value: string): string {
   return value
@@ -120,6 +148,22 @@ function buildEnquiryEmailHtml(params: {
 
 export async function POST(request: Request) {
   try {
+    const forwardedFor = request.headers.get("x-forwarded-for") || "";
+    const clientIp =
+      forwardedFor.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip") ||
+      "unknown";
+    const rate = checkRateLimit(clientIp);
+    if (!rate.allowed) {
+      return NextResponse.json(
+        { error: "Too many enquiries sent. Please try again in a few minutes." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(rate.retryAfterSec) },
+        }
+      );
+    }
+
     const body = (await request.json()) as ContactPayload;
     const name = (body.name ?? "").trim();
     const email = (body.email ?? "").trim();

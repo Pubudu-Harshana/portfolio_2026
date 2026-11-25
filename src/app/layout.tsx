@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, Plus_Jakarta_Sans } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import FloatingCvButton from "@/components/FloatingCvButton";
 import PageLoader from "@/components/PageLoader";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -98,6 +99,7 @@ export default function RootLayout({
         <SmoothScroll>{children}</SmoothScroll>
         <FloatingCvButton />
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

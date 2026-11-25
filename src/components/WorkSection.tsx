@@ -53,9 +53,12 @@ export default function WorkSection() {
     );
   };
 
-  // Keyboard support for modals & lightbox (Escape, Left/Right arrows)
+  // Keyboard support + body scroll lock for modals & lightbox
   useEffect(() => {
     if (!selectedProject && lightboxIndex === null) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -69,7 +72,10 @@ export default function WorkSection() {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [selectedProject, lightboxIndex]);
 
   return (

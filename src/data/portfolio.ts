@@ -53,7 +53,7 @@ export const PROFILE = {
   whatsappUrl: "https://wa.me/94712407273",
   whatsappDisplay: "071 240 7273",
   agencyUrl: "https://www.infavour.tech",
-  email: "pubuduhar@gmail.com",
+  email: "hello@pubudu.online",
   location: "Colombo, Sri Lanka · Remote Worldwide",
   bioTitle: "Bridging bold visual craft with production-grade engineering.",
   bioParagraphs: [
@@ -223,7 +223,7 @@ export const DESIGN_GALLERY: DesignGalleryItem[] = [
     id: "water-slide-mockup",
     title: "Water Slide 2.0 Packaging",
     category: "Packaging & Mockup",
-    image: "/images/Design works/Water Slide 2.0 car shampoo mockup.png",
+    image: "/images/Design works/Water Slide 2.0 car shampoo mockup.jpg",
   },
   {
     id: "infavour-brand-1",
@@ -283,7 +283,7 @@ export const DESIGN_GALLERY: DesignGalleryItem[] = [
     id: "social-post-1",
     title: "Social Media Post Creative",
     category: "Social Media",
-    image: "/images/Design works/post 1.png",
+    image: "/images/Design works/post 1.jpg",
   },
   {
     id: "campaign-visual",
@@ -307,13 +307,19 @@ export const DESIGN_GALLERY: DesignGalleryItem[] = [
     id: "editorial-poster-a",
     title: "Digital Visual Artwork I",
     category: "Visual Design",
-    image: "/images/Design works/Add a heading.png",
+    image: "/images/Design works/Add a heading.jpg",
   },
   {
     id: "editorial-poster-b",
     title: "Digital Visual Artwork II",
     category: "Visual Design",
-    image: "/images/Design works/Untitled design (1).png",
+    image: "/images/Design works/Untitled design (1).jpg",
+  },
+  {
+    id: "marketing-campaign-visual",
+    title: "Marketing Campaign Visual",
+    category: "Social Media",
+    image: "/images/Design works/marketing new.jpg",
   },
   {
     id: "social-creative-wa",
